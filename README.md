@@ -12,7 +12,7 @@
  3. Overall Expenses
 
 ##========================================================================#
-##.                           Data Understanding                          #
+###                           Data Understanding                          #
 ##========================================================================#
 
 ## Install and Load the required packages
