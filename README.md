@@ -11,9 +11,9 @@
  2. Services Availed by the customer 
  3. Overall Expenses
 
-##========================================================================#
-##                            Data Understanding                          #
-##========================================================================#
+
+## Data Understanding                          
+
 
 ### Install and Load the required packages
 install.packages("MASS")
@@ -53,9 +53,9 @@ telecom<- merge(telecom,internet_data, by="customerID", all = F)
 
 View(telecom) #master file
 
-##===========================================================================##
-##                  Data Preparation & Exploratory Data Analysis             ##
-##===========================================================================##
+
+## Data Preparation & Exploratory Data Analysis       
+
 
 ### Understanding the structure of the collated file
 str(telecom) #7043 obs. of 21 variables;
@@ -131,9 +131,9 @@ ggpairs(telecom[, c("tenure", "MonthlyCharges", "TotalCharges")])
 
 ### As expected, tenure and TotalCharges are highly correlated (corr 0.83)
 
-##===========================================================================##
-##                               Data Preparation                            ##
-##===========================================================================##
+
+## Data Preparation
+
 
 ### De-Duplication
 ### not needed
@@ -154,9 +154,9 @@ View(subset(telecom, telecom$tenure==0)) #vice-versa of above is also true
 ### It means that 11/7043 = 0.001561834 i.e 0.1%, best is to remove these observations from the analysis
 telecom <- telecom[!is.na(telecom$TotalCharges),]
 
-##===========================================================================##
-##                          Feature standardisation                          ##
-##===========================================================================##
+
+## Feature standardisation          
+
 
 ### Normalising continuous features 
 telecom$tenure<- scale(telecom$tenure) # scale used: mean 32.4, sd 24.6
@@ -189,9 +189,9 @@ dummies<- data.frame(sapply(telecom_fact,
 telecom_final<- cbind(telecom[,c(9,2,7,8)],dummies) 
 View(telecom_final) #7032 obs. of  31 variables
 
-##===========================================================================##
-##                  Splitting the data between train and test                ##
-##===========================================================================##
+
+## Splitting the data between train and test 
+
 set.seed(100)
 
 indices = sample.split(telecom_final$Churn, SplitRatio = 0.7)
@@ -200,9 +200,9 @@ train = telecom_final[indices,]
 
 test = telecom_final[!(indices),]
 
-##===========================================================================##
-##                          Logistic Regression                              ##
-##===========================================================================##
+
+## Logistic Regression
+
 ### Initial model
 model_1 = glm(Churn ~ ., data = train, family = "binomial")
 summary(model_1) #AIC 4150.1....31 coeff..nullDev 5699.5...resDev 4102.1
@@ -282,21 +282,18 @@ model_8<- glm(formula = Churn ~ tenure +
 
 summary(model_8) 
 
-##===========================================================================##
+
 ### With 10 significant variables in the model
 final_model<- model_8
-##===========================================================================##
 
-##===========================================================================##
-##                              Model Evaluation                             ##
-##===========================================================================##
+
+## Model Evaluation    
 
 ### Test Data
 ### Predicted probabilities of Churn 1 for test data
 
 test_pred = predict(final_model, type = "response", 
                               newdata = test[,-1])
-
 
 ### Let's see the summary 
 
@@ -309,11 +306,8 @@ View(test)
 test_pred_churn <- factor(ifelse(test_pred >= 0.50, "Yes", "No"))
 test_actual_churn <- factor(ifelse(test$Churn==1,"Yes","No"))
 
-
 table(test_actual_churn,test_pred_churn)
 
-
-##===========================================================================##
 test_pred_churn <- factor(ifelse(test_pred >= 0.40, "Yes", "No"))
 
 install.packages("e1071")
@@ -321,7 +315,7 @@ library(e1071)
 
 test_conf <- confusionMatrix(test_pred_churn, test_actual_churn, positive = "Yes")
 test_conf
-##===========================================================================##
+
 ### Let's Choose the cutoff value. 
 
 ### Let's find out the optimal probalility cutoff 
@@ -386,9 +380,9 @@ sens
 spec
 
 View(test)
-##===========================================================================##
-##					      KS -statistic - Test Data                          ##
-##===========================================================================##
+
+## KS -statistic - Test Data 
+
 
 test_cutoff_churn <- ifelse(test_cutoff_churn=="Yes",1,0)
 test_actual_churn <- ifelse(test_actual_churn=="Yes",1,0)
@@ -406,7 +400,6 @@ ks_table_test <- attr(performance_measures_test, "y.values")[[1]] -
 max(ks_table_test)
 
 
-##===========================================================================##
 ### Lift & Gain Chart 
 
 ### Plotting the lift chart
@@ -432,6 +425,6 @@ lift <- function(labels , predicted_prob,groups=10) {
 }
 
 Churn_decile = lift(test_actual_churn, test_pred, groups = 10)
-##===========================================================================##
-##                               End of File                                 ##
-##===========================================================================##
+
+## End of File    
+
