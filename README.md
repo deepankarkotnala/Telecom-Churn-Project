@@ -60,10 +60,10 @@ View(telecom) #master file
 ## Understanding the structure of the collated file
 str(telecom) #7043 obs. of 21 variables;
 
-## tenure, MonthlyCharges, TotalCharges are continuous
-## SeniorCitizen need to be changed from integer to categorical
+### tenure, MonthlyCharges, TotalCharges are continuous
+### SeniorCitizen need to be changed from integer to categorical
 
-## Barcharts for categorical features with stacked telecom information
+### Barcharts for categorical features with stacked telecom information
 bar_theme1<- theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
                    legend.position="none")
 
