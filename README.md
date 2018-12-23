@@ -1,4 +1,3 @@
- TelecomChurn
  Business Understanding:  
  Based on the past and current customer information, 
  the company has maintained a database containing personal/demographic information, 
